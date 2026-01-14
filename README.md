@@ -1,10 +1,12 @@
 # UnoMacOSTitleBar
-
 Customize macOS window title bars in Uno Platform applications with simple XAML properties or code-behind.
-
+## Installation
+```
+dotnet add package UnoMacOSTitleBar --version 1.0.0-dev.26
+```
+https://www.nuget.org/packages/UnoMacOSTitleBar/
 
 ## Usage
----
 ### Option 1:
 
 In `App.xaml.cs`:

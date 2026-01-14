@@ -45,6 +45,13 @@ jobs:
               --source https://api.nuget.org/v3/index.json
           }
 
+      - name: Create GitHub Release
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "v1.0.0.dev.${{ github.run_number }}"
+          gh release create $tag artifacts/package/release/*.nupkg --draft
 
 # amazing guide:https://andrewlock.net/easily-publishing-nuget-packages-from-github-actions-with-trusted-publishing/ 
 # https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing#github-actions

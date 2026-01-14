@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace UnoMacOSTitleBar;
 
@@ -28,7 +28,7 @@ public static class MacWindowProperties
             "ExtendContent",
             typeof(bool),
             typeof(MacWindowProperties),
-            new PropertyMetadata(true, OnPropertyChanged));
+            new PropertyMetadata(false, OnPropertyChanged));
 
     /// <summary>
     /// Gets the ExtendContent property value.
@@ -55,7 +55,7 @@ public static class MacWindowProperties
             "Transparent",
             typeof(bool),
             typeof(MacWindowProperties),
-            new PropertyMetadata(true, OnPropertyChanged));
+            new PropertyMetadata(false, OnPropertyChanged));
 
     /// <summary>
     /// Gets the Transparent property value.
@@ -82,7 +82,7 @@ public static class MacWindowProperties
             "HideTitle",
             typeof(bool),
             typeof(MacWindowProperties),
-            new PropertyMetadata(true, OnPropertyChanged));
+            new PropertyMetadata(false, OnPropertyChanged));
 
     /// <summary>
     /// Gets the HideTitle property value.
@@ -151,21 +151,16 @@ public static class MacWindowProperties
 
     #endregion Options (Alternative: Single Property with Flags)
 
-    private static void ApplyTitleBarSettings()
+    private static void ApplyTitleBarSettings(DependencyObject window)
     {
-        // Get current window
-        var window = Microsoft.UI.Xaml.Window.Current;
-        if (window?.Content is FrameworkElement content)
+        var macBar = new MacTitleBar
         {
-            var macBar = new MacTitleBar
-            {
-                ExtendContent = GetExtendContent(content),
-                Transparent = GetTransparent(content),
-                HideTitle = GetHideTitle(content),
-                ThickTitleBar = GetThickTitleBar(content)
-            };
-            macBar.Apply();
-        }
+            ExtendContent = GetExtendContent(window),
+            Transparent = GetTransparent(window),
+            HideTitle = GetHideTitle(window),
+            ThickTitleBar = GetThickTitleBar(window)
+        };
+        macBar.Apply();
     }
 
     private static void ApplyTitleBarSettings(MacTitleBar.Options options)
@@ -174,32 +169,16 @@ public static class MacWindowProperties
         macBar.Apply();
     }
 
-    private static void ApplyWhenReady(DependencyObject d, MacTitleBar.Options? options = null)
-    {
-        // Since Window doesn't inherit from DependencyObject in Uno,
-        // we apply immediately assuming this is being set at startup
-        if (options.HasValue)
-        {
-            ApplyTitleBarSettings(options.Value);
-        }
-        else
-        {
-            ApplyTitleBarSettings();
-        }
-    }
-
     private static void OnOptionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (e.NewValue is MacTitleBar.Options options)
         {
-            ApplyWhenReady(d, options);
+            ApplyTitleBarSettings(options);
         }
     }
 
     private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        // The attached properties are set on the Window's Content (usually a Frame or Page)
-        // We need to traverse up to find the Window or apply when Content is set
-        ApplyWhenReady(d);
+        ApplyTitleBarSettings(d);
     }
 }
