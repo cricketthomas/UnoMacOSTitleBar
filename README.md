@@ -9,10 +9,26 @@ https://www.nuget.org/packages/UnoMacOSTitleBar/
 ## Usage
 ### Option 1:
 
+In your `Directory.Packages.props` file
+```xml
+ <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'">
+     <PackageVersion Include="UnoMacOSTitleBar" Version="1.0.0-dev.39" />
+ </ItemGroup>
+```
+In your `csproj` file
+```xml
+ <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'">
+     <PackageReference Include="UnoMacOSTitleBar" />
+ </ItemGroup>
+```
+
+
 In `App.xaml.cs`:
 
 ```csharp
+#if HAS_UNO_SKIA_MACOS || __UNO_SKIA_MACOS__
 using UnoMacOSTitleBar;
+#endif
 
 protected override void OnLaunched(LaunchActivatedEventArgs args)
 {
@@ -87,6 +103,8 @@ Creates a thicker draggable area by attaching an `NSToolbar` to the window. Perf
 ## Examples
 
 ### Transparent Title Bar with Title Visible
+>[!WARNING]
+> This is currently a work  in progress with bindings to compile on other platforms.
 
 ```xml
 <Window mac:MacWindowProperties.ExtendContent="True"
