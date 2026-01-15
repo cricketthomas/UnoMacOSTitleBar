@@ -1,8 +1,14 @@
 # UnoMacOSTitleBar
-Customize macOS window title bars in Uno Platform applications with simple XAML properties or code-behind.
+Customize macOS window title bars in Uno Platform applications with simple XAML properties or code-behind! 
+
+## Video Demo
+
+https://github.com/user-attachments/assets/14cc0839-1d04-4eaf-8acb-c69bbcace666
+
+
 ## Installation
 ```
-dotnet add package UnoMacOSTitleBar --version 1.0.0-dev.26
+dotnet add package UnoMacOSTitleBar
 ```
 https://www.nuget.org/packages/UnoMacOSTitleBar/
 
@@ -12,7 +18,7 @@ https://www.nuget.org/packages/UnoMacOSTitleBar/
 In your `Directory.Packages.props` file
 ```xml
  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'">
-     <PackageVersion Include="UnoMacOSTitleBar" Version="1.0.0-dev.39" />
+     <PackageVersion Include="UnoMacOSTitleBar" Version="xxxxxxxxxxx" />
  </ItemGroup>
 ```
 In your `csproj` file
@@ -70,7 +76,7 @@ MacWindowHelper.Configure(
 For full control, use the `MacTitleBar` class directly:
 
 ```csharp
-#if HAS_UNO_SKIA_APPLE_UIKIT || HAS_UNO_SKIA_MACOS
+#if HAS_UNO_SKIA_MACOS || __UNO_SKIA_MACOS__
 var macBar = new UnoMacOSTitleBar.MacTitleBar
 {
     ExtendContent = true,
@@ -111,6 +117,8 @@ Creates a thicker draggable area by attaching an `NSToolbar` to the window. Perf
         mac:MacWindowProperties.Transparent="True"
         mac:MacWindowProperties.HideTitle="False"
         mac:MacWindowProperties.ThickTitleBar="True">
+// This can also be done on MainPage.xaml
+
 ```
 
 ### Custom Title Bar (No Native Title)
